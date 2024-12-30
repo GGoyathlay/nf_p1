@@ -50,14 +50,14 @@ CREATE TABLE IF NOT EXISTS DS.MD_EXCHANGE_RATE_D (
 
 CREATE TABLE DS.MD_LEDGER_ACCOUNT_S (
     chapter                 VARCHAR(16),
-    chapter_name            VARCHAR(22),
+    chapter_name            VARCHAR(255),
     section_number          INTEGER,
     section_name            VARCHAR(21),
-    subsection_name         VARCHAR(47),
+    subsection_name         VARCHAR(255),
     ledger1_account         INTEGER,
     ledger1_account_name    VARCHAR(153),
     ledger_account          INTEGER NOT NULL,
-    ledger_account_name     VARCHAR(47),
+    ledger_account_name     VARCHAR(255),
     characteristic          CHAR(1),
     start_date              DATE NOT NULL,
     end_date                DATE,
