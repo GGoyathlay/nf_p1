@@ -51,7 +51,7 @@ CREATE TABLE DS.MD_LEDGER_ACCOUNT_S (
     chapter                 VARCHAR(16),
     chapter_name            VARCHAR(255),
     section_number          INTEGER,
-    section_name            VARCHAR(21),
+    section_name            VARCHAR(255),
     subsection_name         VARCHAR(255),
     ledger1_account         INTEGER,
     ledger1_account_name    VARCHAR(153),
