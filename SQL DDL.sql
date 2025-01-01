@@ -15,8 +15,7 @@ CREATE TABLE IF NOT EXISTS DS.FT_POSTING_F (
     credit_account_rk NUMERIC NOT NULL,
     debet_account_rk NUMERIC NOT NULL,
     credit_amount FLOAT,
-    debet_amount FLOAT,
-    PRIMARY KEY (oper_date, credit_account_rk, debet_account_rk)
+    debet_amount FLOAT
 );
 
 CREATE TABLE IF NOT EXISTS DS.MD_ACCOUNT_D (
@@ -36,7 +35,7 @@ CREATE TABLE IF NOT EXISTS DS.MD_CURRENCY_D (
     data_actual_end_date DATE,
     currency_code VARCHAR(3),
     code_iso_char VARCHAR(3),
-    PRIMARY KEY (currency_rk)
+    PRIMARY KEY (currency_rk, data_actual_date)
 );
 
 CREATE TABLE IF NOT EXISTS DS.MD_EXCHANGE_RATE_D (

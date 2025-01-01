@@ -46,6 +46,12 @@ def load_table(file_path, table_name, conflict_columns, encoding='utf-8', **kwar
     time.sleep(5)
 
     try:
+        # Если таблица DS.FT_POSTING_F, очищаем её перед загрузкой
+        if table_name == 'DS.FT_POSTING_F':
+            truncate_query = f"TRUNCATE TABLE {table_name};"
+            cursor.execute(truncate_query)
+            conn.commit()
+
         # Чтение данных из файла
         df = pd.read_csv(file_path, delimiter=";", encoding=encoding)
 
@@ -65,12 +71,20 @@ def load_table(file_path, table_name, conflict_columns, encoding='utf-8', **kwar
         # Загрузка данных
         records_processed = 0
         for _, row in df.iterrows():
-            query = f"""
-            INSERT INTO {table_name} ({', '.join(df.columns)})
-            VALUES ({', '.join(['%s'] * len(df.columns))})
-            ON CONFLICT ({', '.join(conflict_columns)})
-            DO UPDATE SET {', '.join([f"{col} = EXCLUDED.{col}" for col in df.columns if col not in conflict_columns])};
-            """
+            if conflict_columns:
+                # Если конфликтные столбцы указаны
+                query = f"""
+                INSERT INTO {table_name} ({', '.join(df.columns)})
+                VALUES ({', '.join(['%s'] * len(df.columns))})
+                ON CONFLICT ({', '.join(conflict_columns)})
+                DO UPDATE SET {', '.join([f"{col} = EXCLUDED.{col}" for col in df.columns if col not in conflict_columns])};
+                """
+            else:
+                # Если конфликтные столбцы отсутствуют
+                query = f"""
+                INSERT INTO {table_name} ({', '.join(df.columns)})
+                VALUES ({', '.join(['%s'] * len(df.columns))});
+                """
             cursor.execute(query, tuple(row))
             records_processed += 1
 
@@ -125,7 +139,7 @@ with DAG(
         {
             "file_path": "/lab_af/ft_posting_f.csv",
             "table_name": "DS.FT_POSTING_F",
-            "conflict_columns": ["oper_date", "credit_account_rk", "debet_account_rk"]
+            "conflict_columns": []
         },
         {
             "file_path": "/lab_af/md_account_d.csv",
@@ -135,7 +149,7 @@ with DAG(
         {
             "file_path": "/lab_af/md_currency_d.csv",
             "table_name": "DS.MD_CURRENCY_D",
-            "conflict_columns": ["currency_rk"]
+            "conflict_columns": ["currency_rk", "data_actual_date"]
         },
         {
             "file_path": "/lab_af/md_exchange_rate_d.csv",
