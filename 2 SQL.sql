@@ -21,21 +21,11 @@ CREATE TABLE DM.DM_ACCOUNT_BALANCE_F (
     PRIMARY KEY (on_date, account_rk)
 );
 -- Создаем таблицы логов в схеме logs
--- Таблицы используются для записи информации о расчете витрин
-CREATE TABLE logs.log_table (
-    log_id SERIAL PRIMARY KEY,          -- Уникальный идентификатор записи в логе
-    process_name VARCHAR(100) NOT NULL, -- Имя процесса (например, название процедуры расчета)
-    process_date DATE NOT NULL,         -- Дата, за которую выполняется расчет
-    start_time TIMESTAMP NOT NULL,      -- Время начала процесса
-    end_time TIMESTAMP,                 -- Время окончания процесса
-    status VARCHAR(50),                 -- Статус процесса (успех, ошибка и т. д.)
-    message TEXT                        -- Дополнительная информация или описание ошибки
-);
 CREATE TABLE logs.process_log (
     log_id SERIAL PRIMARY KEY,              -- Уникальный идентификатор лога
-    process_name VARCHAR(255) NOT NULL,      -- Название процесса
+    process_name VARCHAR(255) NOT NULL,     -- Название процесса
     log_date TIMESTAMP NOT NULL,            -- Дата и время записи
-    status VARCHAR(50) NOT NULL,            -- Статус процесса (например, STARTED, COMPLETED)
+    status VARCHAR(50) NOT NULL,            -- Статус процесса
     details TEXT                            -- Дополнительные детали (необязательно)
 );
 
